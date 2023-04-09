@@ -34,19 +34,19 @@ import com.lowagie.text.DocumentException;
 @Controller
 public class EmpleadoController {
 
-	@Autowired
+	@Autowired /*Inyección de la clase mediante Bean*/
 	private EmpleadoService empleadoService;
 	
-	@GetMapping("/ver/{id}")
+	@GetMapping("/ver/{id}") /*Solicitud HTTP GET Mediante Controlador y vinculo variable de ruta con PathVariable*/
 	public String verDetallesDelEmpleado(@PathVariable(value = "id") Long id,Map<String,Object> modelo,RedirectAttributes flash) {
-		Empleado empleado = empleadoService.findOne(id);
-		if(empleado == null) {
-			flash.addFlashAttribute("error", "El empleado no existe en la base de datos");
-			return "redirect:/listar";
-		}
-		
+
+		Empleado empleado = empleadoService.findOne(id);/*Recupero el objeto empleado*/
+		/*Si es nulo el objeto o el id se retorna el mensaje de error y se redirecciona*/
+		if(empleado == null) {flash.addFlashAttribute("error", "El empleado no existe en la base de datos");return "redirect:/listar";}
+		/*Si hay objeto e id se coloca en la variable modelo los detalles del empleado*/
 		modelo.put("empleado",empleado);
 		modelo.put("titulo", "Detalles del empleado " + empleado.getNombre());
+		/*retono vista jsp*/
 		return "ver";
 	}
 	
